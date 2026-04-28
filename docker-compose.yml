@@ -1,0 +1,11 @@
+services:
+  api:
+    build:
+      context: ./UserManagementApi
+      dockerfile: UserManagementApi/Dockerfile
+    environment:
+      - ConnectionStrings__DefaultConnection=${DB_CONNECTION_STRING}
+      - Jwt__Key=${JWT_KEY}
+      - ASPNETCORE_ENVIRONMENT=Development
+    ports:
+      - "8080:8080"

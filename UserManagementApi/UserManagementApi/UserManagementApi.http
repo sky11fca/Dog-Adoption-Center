@@ -1,0 +1,26 @@
+@UserManagementApi_HostAddress = http://localhost:5019
+
+###
+
+POST {{UserManagementApi_HostAddress}}/users 
+Content-Type: application/json
+
+{
+       "username": "alice",
+       "email": "alice@example.ro",
+       "password": "abcabcbac"
+}
+
+###
+
+GET {{UserManagementApi_HostAddress}}/users
+
+###
+
+POST {{UserManagementApi_HostAddress}}/login
+Content-Type: application/json
+
+{
+  "email": "alice@example.ro",
+  "password": "abcabcbac"
+}
