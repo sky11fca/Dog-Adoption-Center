@@ -25,33 +25,44 @@ public class AnalyticsServiceImpl : IAnalyticsService
         var shelterId = new Guid("00000000-0000-0000-0000-000000000001");
         var userId = new Guid("00000000-0000-0000-0000-000000000002");
 
-        for (int daysAgo = 29; daysAgo >= 8; daysAgo--)
+        for (int daysAgo = 29; daysAgo >= 1; daysAgo--)
         {
+            int views      = daysAgo >= 8 ? rng.Next(8, 25) : rng.Next(2, 6);
+            int apps       = daysAgo >= 8 ? rng.Next(1, 6)  : rng.Next(0, 2);
+            bool adoption  = daysAgo >= 8 ? rng.Next(0, 3) == 0 : rng.Next(0, 7) == 0;
+
             var day = DateTimeOffset.UtcNow.AddDays(-daysAgo);
 
-            for (int v = 0; v < rng.Next(8, 25); v++)
+            for (int v = 0; v < views; v++)
                 _events.Add(new AdoptionEvent { PetId = petIds[rng.Next(petIds.Length)], UserId = userId, ShelterId = shelterId, EventType = "pet.viewed", OccurredAt = day, Metadata = new() });
 
-            for (int a = 0; a < rng.Next(1, 6); a++)
+            for (int a = 0; a < apps; a++)
                 _events.Add(new AdoptionEvent { PetId = petIds[rng.Next(petIds.Length)], UserId = userId, ShelterId = shelterId, EventType = "application.submitted", OccurredAt = day, Metadata = new() });
 
-            if (rng.Next(0, 3) == 0)
+            if (adoption)
                 _events.Add(new AdoptionEvent { PetId = petIds[rng.Next(petIds.Length)], UserId = userId, ShelterId = shelterId, EventType = "adoption.completed", OccurredAt = day, Metadata = new() });
         }
     }
 
     public Task TrackEventAsync(AdoptionEvent adoptionEvent, CancellationToken cancellationToken = default)
     {
-        var telemetryEvent = new EventTelemetry(adoptionEvent.EventType);
-        telemetryEvent.Properties["PetId"] = adoptionEvent.PetId.ToString();
-        telemetryEvent.Properties["UserId"] = adoptionEvent.UserId.ToString();
-        telemetryEvent.Properties["ShelterId"] = adoptionEvent.ShelterId.ToString();
-        telemetryEvent.Timestamp = adoptionEvent.OccurredAt;
+        try
+        {
+            var telemetryEvent = new EventTelemetry(adoptionEvent.EventType);
+            telemetryEvent.Properties["PetId"] = adoptionEvent.PetId.ToString();
+            telemetryEvent.Properties["UserId"] = adoptionEvent.UserId.ToString();
+            telemetryEvent.Properties["ShelterId"] = adoptionEvent.ShelterId.ToString();
+            telemetryEvent.Timestamp = adoptionEvent.OccurredAt;
 
-        foreach (var (key, value) in adoptionEvent.Metadata)
-            telemetryEvent.Properties[key] = value;
+            foreach (var (key, value) in adoptionEvent.Metadata)
+                telemetryEvent.Properties[key] = value;
 
-        _telemetry.TrackEvent(telemetryEvent);
+            _telemetry.TrackEvent(telemetryEvent);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogWarning(ex, "App Insights telemetry failed — event still tracked in-memory");
+        }
 
         lock (_events) _events.Add(adoptionEvent);
 
