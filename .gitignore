@@ -1,9 +1,8 @@
 .env
 k8s/
-
+PetManagementApi/MIL_NOTES.md
 # .NET build artifacts
-**/obj/
 **/bin/
-
+**/obj/
 # Node
 node_modules/

@@ -24,6 +24,8 @@ services:
     depends_on:
       - db
       - redis
+    ports:
+      - "8080:8080"
     restart: unless-stopped
 
   frontend:
@@ -41,6 +43,22 @@ services:
     depends_on:
       - api
       - frontend
+    restart: unless-stopped
+
+  pet-api:
+    build:
+      context: ./PetManagementApi
+      dockerfile: PetManagementApi/Dockerfile
+    environment:
+      - ConnectionStrings__PetDatabase=${PET_DB_CONNECTION_STRING}
+      - BlobStorage__AccountName=${BLOB_ACCOUNT_NAME}
+      - BlobStorage__AccountKey=${BLOB_ACCOUNT_KEY}
+      - BlobStorage__ContainerName=${BLOB_CONTAINER_NAME:-pet-photos}
+      - BlobStorage__PublicBaseUrl=${BLOB_PUBLIC_BASE_URL}
+      - ASPNETCORE_ENVIRONMENT=Development
+      - PetManagement__AutoCreateDatabase=true
+    ports:
+      - "8082:8080"
     restart: unless-stopped
 
 volumes:
