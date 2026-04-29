@@ -1,11 +1,18 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Infrastructure;
 using PetManagementApi.Contracts;
 using PetManagementApi.Data;
 using PetManagementApi.Options;
 using PetManagementApi.Services;
+using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.ConfigureHttpJsonOptions(options =>
+{
+    options.SerializerOptions.Converters.Add(new JsonStringEnumConverter());
+});
 
 builder.Services.AddDbContext<PetManagementContext>(options =>
 {
@@ -41,6 +48,19 @@ if (app.Configuration.GetValue<bool>("PetManagement:AutoCreateDatabase"))
     using var scope = app.Services.CreateScope();
     var context = scope.ServiceProvider.GetRequiredService<PetManagementContext>();
     context.Database.EnsureCreated();
+    
+    try 
+    {
+        var creator = context.Database.GetService<Microsoft.EntityFrameworkCore.Storage.IDatabaseCreator>() as Microsoft.EntityFrameworkCore.Storage.RelationalDatabaseCreator;
+        if (creator != null)
+        {
+            creator.CreateTables();
+        }
+    }
+    catch (Exception)
+    {
+        // Tables likely already exist, ignore.
+    }
 }
 
 app.MapGet("/", () => Results.Ok(new
