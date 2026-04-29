@@ -1,2 +1,9 @@
 .env
 k8s/
+
+# .NET build artifacts
+**/obj/
+**/bin/
+
+# Node
+node_modules/
