@@ -17,6 +17,8 @@ export default function Navbar() {
       </Link>
       <div className="flex gap-4 items-center text-sm">
         <Link to="/" className="hover:text-amber-200 transition">Home</Link>
+        <Link to="/reviews" className="hover:text-amber-200 transition">Reviews</Link>
+        <Link to="/analytics" className="hover:text-amber-200 transition">Analytics</Link>
         {isAuthenticated ? (
           <>
             <Link to="/admin" className="hover:text-amber-200 transition">Admin</Link>

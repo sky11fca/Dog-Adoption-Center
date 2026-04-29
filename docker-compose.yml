@@ -61,5 +61,47 @@ services:
       - "8082:8080"
     restart: unless-stopped
 
+  notification-service:
+    build:
+      context: ./NotificationService
+      dockerfile: NotificationService/Dockerfile
+    environment:
+      - ServiceBus__ConnectionString=${SERVICE_BUS_CONNECTION_STRING}
+      - ServiceBus__ApplicationStatusQueueName=${SERVICE_BUS_QUEUE_NAME:-application-status-changed}
+      - Smtp__Host=${SMTP_HOST}
+      - Smtp__Port=${SMTP_PORT:-587}
+      - Smtp__Username=${SMTP_USERNAME}
+      - Smtp__Password=${SMTP_PASSWORD}
+      - Smtp__FromAddress=${SMTP_FROM_ADDRESS:-noreply@dogadoption.example.com}
+      - ASPNETCORE_ENVIRONMENT=Development
+    ports:
+      - "8083:8080"
+    restart: unless-stopped
+
+  review-service:
+    build:
+      context: ./ReviewService
+      dockerfile: ReviewService/Dockerfile
+    environment:
+      - ConnectionStrings__ReviewDatabase=${REVIEW_DB_CONNECTION_STRING}
+      - ReviewService__AutoCreateDatabase=true
+      - ASPNETCORE_ENVIRONMENT=Development
+    depends_on:
+      - db
+    ports:
+      - "8084:8080"
+    restart: unless-stopped
+
+  analytics-service:
+    build:
+      context: ./AnalyticsService
+      dockerfile: AnalyticsService/Dockerfile
+    environment:
+      - ApplicationInsights__ConnectionString=${APP_INSIGHTS_CONNECTION_STRING}
+      - ASPNETCORE_ENVIRONMENT=Development
+    ports:
+      - "8085:8080"
+    restart: unless-stopped
+
 volumes:
   db_data:
