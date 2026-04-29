@@ -1,28 +1,24 @@
 {
   "format": 1,
   "restore": {
-    "/home/mrbogdanovich/git/Dog-Adoption-Center/UserManagementApi/UserManagementApi/UserManagementApi.csproj": {}
+    "C:\\Users\\Andrei\\CC\\Dog-Adoption-Center\\UserManagementApi\\UserManagementApi\\UserManagementApi.csproj": {}
   },
   "projects": {
-    "/home/mrbogdanovich/git/Dog-Adoption-Center/UserManagementApi/UserManagementApi/UserManagementApi.csproj": {
+    "C:\\Users\\Andrei\\CC\\Dog-Adoption-Center\\UserManagementApi\\UserManagementApi\\UserManagementApi.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "/home/mrbogdanovich/git/Dog-Adoption-Center/UserManagementApi/UserManagementApi/UserManagementApi.csproj",
+        "projectUniqueName": "C:\\Users\\Andrei\\CC\\Dog-Adoption-Center\\UserManagementApi\\UserManagementApi\\UserManagementApi.csproj",
         "projectName": "UserManagementApi",
-        "projectPath": "/home/mrbogdanovich/git/Dog-Adoption-Center/UserManagementApi/UserManagementApi/UserManagementApi.csproj",
-        "packagesPath": "/home/mrbogdanovich/.nuget/packages/",
-        "outputPath": "/home/mrbogdanovich/git/Dog-Adoption-Center/UserManagementApi/UserManagementApi/obj/",
+        "projectPath": "C:\\Users\\Andrei\\CC\\Dog-Adoption-Center\\UserManagementApi\\UserManagementApi\\UserManagementApi.csproj",
+        "packagesPath": "C:\\Users\\Andrei\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\Andrei\\CC\\Dog-Adoption-Center\\UserManagementApi\\UserManagementApi\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "/home/mrbogdanovich/.nuget/NuGet/NuGet.Config"
+          "C:\\Users\\Andrei\\AppData\\Roaming\\NuGet\\NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "net10.0"
         ],
-        "sources": {
-          "/home/mrbogdanovich/.dotnet/library-packs": {},
-          "https://api.nuget.org/v3/index.json": {}
-        },
         "frameworks": {
           "net10.0": {
             "targetAlias": "net10.0",
@@ -39,7 +35,7 @@
           "auditLevel": "low",
           "auditMode": "all"
         },
-        "SdkAnalysisLevel": "10.0.100"
+        "SdkAnalysisLevel": "10.0.200"
       },
       "frameworks": {
         "net10.0": {
@@ -99,7 +95,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "/home/mrbogdanovich/.dotnet/sdk/10.0.100/PortableRuntimeIdentifierGraph.json",
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\10.0.201/PortableRuntimeIdentifierGraph.json",
           "packagesToPrune": {
             "Microsoft.AspNetCore": "(,10.0.32767]",
             "Microsoft.AspNetCore.Antiforgery": "(,10.0.32767]",
