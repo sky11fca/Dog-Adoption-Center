@@ -18,28 +18,50 @@ const statusStyle = {
 }
 
 function AdoptModal({ dog, onClose }) {
-  const { user } = useAuth()
+  const { user, token } = useAuth()
   const [form, setForm] = useState({ message: '' })
   const [submitting, setSubmitting] = useState(false)
   const [success, setSuccess] = useState(false)
+  const [errorMsg, setErrorMsg] = useState('')
 
   const handleSubmit = async (e) => {
     e.preventDefault()
     setSubmitting(true)
+    setErrorMsg('')
+    
+    let userId = '00000000-0000-0000-0000-000000000002'
+    if (token) {
+      try {
+        const payload = JSON.parse(atob(token.split('.')[1]))
+        if (payload.id) userId = payload.id
+      } catch (e) {}
+    }
+
     try {
-      await api.trackEvent({
+      await api.submitApplication({
+        petId: `00000000-0000-0000-0000-00000000000${dog.id}`,
+        userId: userId,
+        applicantName: user?.username ?? user?.email ?? 'Anonymous',
+        applicantEmail: user?.email ?? 'anonymous@example.com',
+        justification: form.message
+      }, token)
+
+      api.trackEvent({
         petId: '00000000-0000-0000-0000-00000000000' + dog.id,
-        userId: '00000000-0000-0000-0000-000000000002',
+        userId: userId,
         shelterId: '00000000-0000-0000-0000-000000000001',
         eventType: 'application.submitted',
         occurredAt: new Date().toISOString(),
         metadata: { petName: dog.name, applicantName: user?.username ?? '' },
-      })
-    } catch {
-      // analytics is best-effort
+      }).catch(() => {})
+
+      setSuccess(true)
+    } catch (err) {
+      setErrorMsg('Failed to submit application. Please try again.')
+      console.error(err)
+    } finally {
+      setSubmitting(false)
     }
-    setSuccess(true)
-    setSubmitting(false)
   }
 
   return (
@@ -69,6 +91,7 @@ function AdoptModal({ dog, onClose }) {
               <p className="text-sm text-gray-500">
                 Applying as <span className="font-medium text-gray-700">{user?.username ?? user?.email}</span>
               </p>
+              {errorMsg && <p className="text-red-500 text-sm font-semibold">{errorMsg}</p>}
               <div>
                 <label className="block text-xs text-gray-500 mb-1">Why do you want to adopt {dog.name}?</label>
                 <textarea

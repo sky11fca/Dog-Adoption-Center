@@ -16,6 +16,7 @@ async function request(method, baseUrl, path, body, token) {
 const user = (method, path, body, token) => request(method, '/api', path, body, token)
 const reviews = (method, path, body, token) => request(method, '/api/reviews', path, body, token)
 const analytics = (method, path, body, token) => request(method, '/api/analytics', path, body, token)
+const adoption = (method, path, body, token) => request(method, '/api/adoption', path, body, token)
 
 export const api = {
   login: (email, password) =>
@@ -46,4 +47,9 @@ export const api = {
     analytics('GET', `/trends?from=${from}&to=${to}`),
   trackEvent: (event) =>
     analytics('POST', '/events', event),
+
+  submitApplication: (data, token) =>
+    adoption('POST', '/', data, token),
+  getApplication: (id, token) =>
+    adoption('GET', `/${id}`, null, token),
 }

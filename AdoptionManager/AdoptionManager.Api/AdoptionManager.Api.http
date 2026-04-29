@@ -1,0 +1,6 @@
+@AdoptionManager.Api_HostAddress = http://localhost:5268
+
+GET {{AdoptionManager.Api_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
