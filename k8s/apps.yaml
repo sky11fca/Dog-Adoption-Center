@@ -152,6 +152,13 @@ spec:
         ports:
         - containerPort: 8084
         env:
+        - name: ConnectionStrings__ReviewDatabase
+          valueFrom:
+            secretKeyRef:
+              name: app-secrets
+              key: REVIEW_DB_CONNECTION
+        - name: ReviewService__AutoCreateDatabase
+          value: "true"
         - name: ASPNETCORE_HTTP_PORTS
           value: "8084"
 ---

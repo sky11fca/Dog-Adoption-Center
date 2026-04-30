@@ -91,6 +91,7 @@ jobs:
           sed -i "s|{{ACR_NAME}}|$ACR_NAME|g" k8s/*.yaml
           sed -i "s|APP_INSIGHTS_CONNECTION: \"placeholder\"|APP_INSIGHTS_CONNECTION: \"${{ secrets.APP_INSIGHTS_CONNECTION }}\"|g" k8s/secrets.yaml
           sed -i "s|SERVICE_BUS_CONNECTION: \"placeholder\"|SERVICE_BUS_CONNECTION: \"${{ secrets.SERVICE_BUS_CONNECTION_STRING }}\"|g" k8s/secrets.yaml
+          sed -i "s|REVIEW_DB_CONNECTION: \"placeholder\"|REVIEW_DB_CONNECTION: \"${{ secrets.REVIEW_DB_CONNECTION_STRING }}\"|g" k8s/secrets.yaml
 
       - name: Deploy to AKS
         run: |
