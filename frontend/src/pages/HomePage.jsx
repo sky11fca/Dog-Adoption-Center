@@ -3,12 +3,12 @@ import { api } from '../api/api'
 import { useAuth } from '../contexts/AuthContext'
 
 const MOCK_DOGS = [
-  { id: 1, name: 'Buddy', breed: 'Golden Retriever', age: '2 years', status: 'Available' },
-  { id: 2, name: 'Max', breed: 'German Shepherd', age: '3 years', status: 'Available' },
-  { id: 3, name: 'Bella', breed: 'Labrador', age: '1 year', status: 'Pending' },
-  { id: 4, name: 'Charlie', breed: 'Beagle', age: '4 years', status: 'Available' },
-  { id: 5, name: 'Luna', breed: 'Husky', age: '2 years', status: 'Available' },
-  { id: 6, name: 'Rocky', breed: 'Bulldog', age: '5 years', status: 'Adopted' },
+  { id: 1, name: 'Buddy', breed: 'Golden Retriever', age: '2 years', status: 'Available', breedSlug: 'retriever/golden' },
+  { id: 2, name: 'Max', breed: 'Doberman', age: '3 years', status: 'Available', breedSlug: 'doberman' },
+  { id: 3, name: 'Bella', breed: 'Labrador', age: '1 year', status: 'Pending', breedSlug: 'labrador' },
+  { id: 4, name: 'Charlie', breed: 'Beagle', age: '4 years', status: 'Available', breedSlug: 'beagle' },
+  { id: 5, name: 'Luna', breed: 'Husky', age: '2 years', status: 'Available', breedSlug: 'husky' },
+  { id: 6, name: 'Rocky', breed: 'Bulldog', age: '5 years', status: 'Adopted', breedSlug: 'bulldog/english' },
 ]
 
 const statusStyle = {
@@ -121,8 +121,21 @@ function AdoptModal({ dog, onClose }) {
 export default function HomePage() {
   const dogsRef = useRef(null)
   const [selectedDog, setSelectedDog] = useState(null)
+  const [dogImages, setDogImages] = useState({})
 
   const scrollToDogs = () => dogsRef.current?.scrollIntoView({ behavior: 'smooth' })
+
+  useEffect(() => {
+    MOCK_DOGS.forEach(dog => {
+      fetch(`https://dog.ceo/api/breed/${dog.breedSlug}/images/random`)
+        .then(r => r.json())
+        .then(data => {
+          if (data.status === 'success')
+            setDogImages(prev => ({ ...prev, [dog.id]: data.message }))
+        })
+        .catch(() => {})
+    })
+  }, [])
 
   useEffect(() => {
     MOCK_DOGS.forEach(dog => {
@@ -157,8 +170,11 @@ export default function HomePage() {
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {MOCK_DOGS.map(dog => (
             <div key={dog.id} className="bg-white rounded-2xl shadow hover:shadow-md transition overflow-hidden">
-              <div className="bg-amber-100 h-36 flex items-center justify-center text-6xl select-none">
-                🐕
+              <div className="h-36 overflow-hidden bg-amber-100">
+                {dogImages[dog.id]
+                  ? <img src={dogImages[dog.id]} alt={dog.name} className="w-full h-full object-cover" />
+                  : <div className="w-full h-full flex items-center justify-center text-6xl select-none">🐕</div>
+                }
               </div>
               <div className="p-4">
                 <div className="flex items-center justify-between mb-1">
