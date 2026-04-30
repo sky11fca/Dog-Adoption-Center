@@ -1,7 +1,10 @@
 using AdoptionManager.Application.Commands;
+using AdoptionManager.Application.Interfaces;
 using AdoptionManager.Domain.Interfaces;
+using AdoptionManager.Infrastructure.Messaging;
 using AdoptionManager.Infrastructure.Persistence;
 using Azure.Identity;
+using Azure.Messaging.ServiceBus;
 using Microsoft.Azure.Cosmos;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -41,6 +44,19 @@ builder.Services.AddScoped<IAdoptionRepository>(sp =>
     var client = sp.GetRequiredService<CosmosClient>();
     return new CosmosAdoptionRepository(client, "AdoptionDb", "Applications");
 });
+
+var serviceBusConnection = Environment.GetEnvironmentVariable("SERVICE_BUS_CONNECTION_STRING")
+    ?? builder.Configuration["ServiceBus:ConnectionString"];
+var serviceBusQueue = Environment.GetEnvironmentVariable("SERVICE_BUS_QUEUE_NAME")
+    ?? builder.Configuration["ServiceBus:QueueName"]
+    ?? "application-status-changed";
+
+builder.Services.AddSingleton(new ServiceBusClient(serviceBusConnection));
+builder.Services.AddSingleton<IEventPublisher>(sp =>
+    new ServiceBusEventPublisher(
+        sp.GetRequiredService<ServiceBusClient>(),
+        serviceBusQueue,
+        sp.GetRequiredService<ILogger<ServiceBusEventPublisher>>()));
 
 var app = builder.Build();
 

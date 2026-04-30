@@ -115,6 +115,8 @@ services:
     environment:
       - COSMOS_URI=${COSMOS_URI}
       - COSMOS_KEY=${COSMOS_KEY}
+      - SERVICE_BUS_CONNECTION_STRING=${SERVICE_BUS_CONNECTION_STRING}
+      - SERVICE_BUS_QUEUE_NAME=${SERVICE_BUS_QUEUE_NAME:-application-status-changed}
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_HTTP_PORTS=8086
     ports:

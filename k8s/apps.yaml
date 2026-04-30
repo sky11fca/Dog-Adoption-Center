@@ -111,6 +111,13 @@ spec:
             secretKeyRef:
               name: app-secrets
               key: COSMOS_KEY
+        - name: SERVICE_BUS_CONNECTION_STRING
+          valueFrom:
+            secretKeyRef:
+              name: app-secrets
+              key: SERVICE_BUS_CONNECTION
+        - name: SERVICE_BUS_QUEUE_NAME
+          value: "application-status-changed"
         - name: ASPNETCORE_HTTP_PORTS
           value: "8086"
 ---
@@ -181,6 +188,11 @@ spec:
         env:
         - name: ASPNETCORE_HTTP_PORTS
           value: "8085"
+        - name: ApplicationInsights__ConnectionString
+          valueFrom:
+            secretKeyRef:
+              name: app-secrets
+              key: APP_INSIGHTS_CONNECTION
 ---
 apiVersion: v1
 kind: Service
