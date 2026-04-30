@@ -1,5 +1,4 @@
 .env
-k8s/
 PetManagementApi/MIL_NOTES.md
 # .NET build artifacts
 **/bin/
