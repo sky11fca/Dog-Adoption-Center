@@ -1,0 +1,47 @@
+\documentclass[12pt,a4paper]{report}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{graphicx}
+\usepackage{hyperref}
+\usepackage{geometry}
+\usepackage{setspace}
+\usepackage{titlesec}
+
+\geometry{margin=2.5cm}
+\onehalfspacing
+
+\title{Technical Report: Dog Adoption Management System}
+\author{Project Team}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+
+\tableofcontents
+
+\chapter{Introduction}
+\input{introduction.tex}
+
+\chapter{Case Study: Pet Adoption Challenges and Opportunities}
+\input{case_study.tex}
+
+\chapter{Technical Details of Existing Solutions}
+\input{existing_solutions.tex}
+
+\chapter{Overview of Technologies and Motivation}
+\input{technologies.tex}
+
+\chapter{Business Canvas}
+\input{business_canvas.tex}
+
+\chapter{Architecture Diagram}
+\input{architecture.tex}
+
+\chapter{Use Case Diagram}
+\input{use_case.tex}
+
+\chapter{Functionality, Flow, and API Documentation}
+\input{functionality_api.tex}
+
+\end{document}

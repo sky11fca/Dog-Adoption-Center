@@ -1,0 +1,10 @@
+Write a technical report of this project
+
+Contents:
+- Case Study that regards the project theme 
+- Technical Details (IE: Architecture, Technology and Marketing) about solutions that already exists
+- Overview of technologies used in this project and motivation
+- Business Canvas
+- An Architecture diagram of the project 
+- Use Case Diagram 
+- Functionality, flow, API documentation
